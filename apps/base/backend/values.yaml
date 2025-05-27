@@ -1,0 +1,4 @@
+---
+containers:
+  backend:
+    image: nginx:alpine

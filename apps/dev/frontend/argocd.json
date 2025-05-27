@@ -1,0 +1,7 @@
+{
+  "chart": {
+    "repository": "https://ameijer.github.io/k8s-as-helm/",
+    "name": "pod",
+    "version": "1.0.1"
+  }
+}

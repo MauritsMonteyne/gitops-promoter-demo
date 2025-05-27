@@ -1,0 +1,44 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: mystack-dev
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/MauritsMonteyne/gitops-promoter-demo.git
+        revision: HEAD
+        files:
+          - path: "apps/**/dev/argocd.json"
+        values:
+          project: mystack
+  template:
+    metadata:
+      name: '{{.path.basename}}-dev'
+      # labels:
+      #   env: dev
+    spec:
+      project: '{{.project}}'
+      sources:
+        - repoURL: '{{.chart.repository}}'
+          chart: '{{.chart.name}}'
+          targetRevision: '{{.chart.version}}'
+          helm:
+            valueFiles:
+              - $values/apps/base/{{.path.basename}}/values.yaml
+              - $values/apps/dev/{{.path.basename}}/values.yaml
+            ignoreMissingValueFiles: true
+        - repoURL: https://github.com/MauritsMonteyne/gitops-promoter-demo.git
+          targetRevision: HEAD
+          ref: values
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: default
+      syncPolicy:
+        # automated:
+        #   selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

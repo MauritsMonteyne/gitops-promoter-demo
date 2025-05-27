@@ -1,0 +1,12 @@
+# Per project
+- ArgoCD project
+- Root application?
+- SecretStore
+- Registry credentials
+
+# Per environment
+- Namespace
+- ApplicationSet
+
+# Uncertain
+- Logging?
