@@ -12,16 +12,14 @@ spec:
         repoURL: https://github.com/MauritsMonteyne/gitops-promoter-demo.git
         revision: HEAD
         files:
-          - path: "apps/**/dev/argocd.json"
-        values:
-          project: mystack
+          - path: "apps/dev/**/argocd.json"
   template:
     metadata:
       name: '{{.path.basename}}-dev'
       # labels:
       #   env: dev
     spec:
-      project: '{{.project}}'
+      project: mystack
       sources:
         - repoURL: '{{.chart.repository}}'
           chart: '{{.chart.name}}'
@@ -36,7 +34,7 @@ spec:
           ref: values
       destination:
         server: https://kubernetes.default.svc
-        namespace: default
+        namespace: mystack-dev
       syncPolicy:
         # automated:
         #   selfHeal: true
